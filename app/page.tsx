@@ -367,7 +367,7 @@ export default function HomePage() {
               Bắt đầu với hai triết gia kinh tế
             </h2>
             <Link
-              href="/economists"
+              href="/"
               className="text-sm text-gray-700 hover:text-gray-900 inline-flex items-center"
             >
               Tất cả <ChevronRight className="h-4 w-4" />
@@ -405,7 +405,7 @@ export default function HomePage() {
                   </div>
                   <div className="pt-3">
                     <Link
-                      href={`/economists/${e.slug}`}
+                      href={`/${e.slug}`}
                       className="inline-flex items-center gap-1 text-gray-900 font-medium"
                     >
                       Xem chi tiết <ArrowRight className="h-4 w-4" />
