@@ -141,26 +141,45 @@ const WORKS = [
 // Timeline
 const TIMELINE = [
   {
+    year: 1883,
+    title: "Sinh ra tại Cambridge",
+    desc: "Sinh ngày 5/6/1883 tại Cambridge, Anh Quốc, trong gia đình trí thức: cha là nhà kinh tế John Neville Keynes, mẹ là nhà hoạt động xã hội Florence Ada Keynes, hình thành nền tảng học thuật từ sớm.",
+  },
+  {
+    year: 1906,
+    title: "Tốt nghiệp Đại học Cambridge",
+    desc: "Tốt nghiệp xuất sắc tại King's College, Cambridge, chịu ảnh hưởng sâu sắc từ nhà kinh tế Alfred Marshall và nhóm triết học Cambridge Apostles, khơi dậy niềm đam mê toán học, triết học và kinh tế học.",
+  },
+  {
+    year: 1915,
+    title: "Gia nhập Bộ Tài chính Anh",
+    desc: "Bắt đầu sự nghiệp hành chính tại Treasury (Bộ Tài chính Anh), mở đường cho vai trò cố vấn kinh tế quốc tế, đặc biệt trong bối cảnh Chiến tranh Thế giới thứ nhất.",
+  },
+  {
     year: 1919,
     title: "Versailles & sách đầu tay",
-    desc: "Cố vấn tại Hội nghị; xuất bản The Economic Consequences of the Peace.",
+    desc: "Tham gia Hội nghị Hòa bình Versailles với vai trò cố vấn kinh tế; xuất bản The Economic Consequences of the Peace, phê phán gay gắt Hiệp ước Versailles và dự báo hệ lụy kinh tế–chính trị châu Âu.",
   },
   {
     year: 1930,
     title: "A Treatise on Money",
-    desc: "Hai tập về tiền tệ: thuần tuý & ứng dụng; đặt nền cho mô hình tổng cầu.",
+    desc: "Xuất bản hai tập về tiền tệ: thuần túy & ứng dụng; phân tích mối quan hệ giữa cung tiền, lãi suất và đầu tư, đặt nền tảng cho mô hình tổng cầu và lý thuyết vĩ mô sau này.",
   },
   {
     year: 1936,
     title: "The General Theory…",
-    desc: "Cách mạng tư duy vai trò Nhà nước, tổng cầu, việc làm.",
+    desc: "Ra mắt kiệt tác The General Theory of Employment, Interest and Money, cách mạng tư duy về vai trò Nhà nước, tổng cầu và việc làm, đặt nền móng cho kinh tế học vĩ mô hiện đại.",
   },
   {
     year: 1944,
     title: "Bretton Woods",
-    desc: "Định hình IMF & World Bank cho trật tự tiền tệ hậu chiến.",
+    desc: "Dẫn dắt phái đoàn Anh tại Hội nghị Bretton Woods, định hình hệ thống tiền tệ quốc tế hậu chiến qua việc thành lập IMF và World Bank, thúc đẩy ổn định toàn cầu.",
   },
-  { year: 1946, title: "Qua đời", desc: "Mất tại Anh, hưởng thọ 62 tuổi." },
+  {
+    year: 1946,
+    title: "Qua đời",
+    desc: "Mất ngày 21/4/1946 tại Tilton, Sussex, Anh Quốc, hưởng thọ 62 tuổi, để lại di sản tư tưởng Keynesianism ảnh hưởng sâu sắc đến chính sách kinh tế thế giới.",
+  },
 ];
 
 // Quotes
@@ -195,25 +214,21 @@ const GALLERY = [
   },
   { src: "/images/keynes-tre.jpg", alt: "Keynes thời trẻ" },
   { src: "/images/keynes-gia.jpg", alt: "Keynes giai đoạn cuối đời" },
-  {
-    src: "/images/milton-friedman.png",
-    alt: "Milton Friedman – Monetarism",
-  },
 ];
 
 // Critiques
 const CRITIQUES = [
   {
-    title: "Monetarist (Milton Friedman…)",
-    body: "Nhấn mạnh vai trò kiểm soát cung tiền để ổn định giá cả; cảnh báo rủi ro lạm phát/nợ công nếu kích cầu kéo dài.",
+    title: "Trường phái tiền tệ (Monetarist) do Milton Friedman khởi xướng",
+    body: "Dù có đóng góp to lớn trong việc định hình nền tảng của kinh tế học vĩ mô hiện đại, học thuyết Keynes vẫn vấp phải nhiều phê phán từ trường phái tiền tệ, đặc biệt do Milton Friedman dẫn dắt. Friedman cho rằng Keynes đã đánh giá thấp vai trò của tiền tệ trong ổn định kinh tế vĩ mô. Việc mở rộng chi tiêu công và gia tăng cung tiền để kích cầu, như Keynes đề xuất, có thể tạo ra tác động tích cực ngắn hạn nhưng lại dẫn đến lạm phát, thâm hụt ngân sách và nợ công cao trong dài hạn. Ông lập luận rằng, thay vì can thiệp mạnh mẽ bằng tài khóa, việc kiểm soát lượng cung tiền mới là chìa khóa duy trì ổn định giá cả và tăng trưởng bền vững, như đã chứng minh qua các chính sách tiền tệ chặt chẽ ở Mỹ những năm 1980 dưới thời Paul Volcker.",
   },
   {
-    title: "Trọng cung (1970s–1980s)",
-    body: "Phê phán quá chú trọng tổng cầu; đề cao cải thiện năng suất dài hạn, công nghệ, môi trường kinh doanh – đặc biệt sau hiện tượng stagflation.",
+    title: "Trường phái trọng cung (Supply-side Economics) trong thập niên 1970–1980",
+    body: "Bên cạnh đó, trường phái trọng cung nổi lên mạnh mẽ vào thập niên 1970–1980, đặc biệt trong giai đoạn 'stagflation' (lạm phát cao đi kèm suy thoái kinh tế), đã chỉ trích học thuyết Keynes vì thất bại trong việc giải thích và xử lý hiện tượng này. Các nhà kinh tế trọng cung, như Arthur Laffer với đường cong Laffer nổi tiếng, phê phán Keynes vì quá chú trọng vào tổng cầu – tức chi tiêu và tiêu dùng – mà xem nhẹ các yếu tố thúc đẩy năng suất dài hạn như đầu tư tư nhân, đổi mới công nghệ, giáo dục và cải thiện môi trường kinh doanh. Họ lập luận rằng để đạt phát triển bền vững, chính phủ cần ưu tiên giảm thuế, khuyến khích sản xuất và tự do hóa thị trường hơn là mở rộng chi tiêu công, như được áp dụng thành công trong 'Reaganomics' tại Mỹ, giúp giảm lạm phát và thúc đẩy tăng trưởng mà không rơi vào bẫy nợ công.",
   },
   {
     title: "Giới hạn trong bối cảnh thế kỷ XXI",
-    body: "Công cụ tài khóa truyền thống có hiệu quả khác trong nền kinh tế số hoá, chuỗi cung ứng toàn cầu biến động; cần phối hợp chính sách linh hoạt.",
+    body: "Trong bối cảnh thế kỷ XXI, khi nền kinh tế toàn cầu chịu tác động mạnh mẽ từ toàn cầu hóa, công nghệ số và kinh tế tri thức, những giới hạn của học thuyết Keynes càng bộc lộ rõ nét hơn bao giờ hết. Các công cụ tài khóa truyền thống như tăng chi tiêu công, hỗ trợ doanh nghiệp, giảm thuế tạm thời không còn phát huy hiệu quả mạnh mẽ như trước trong việc kích thích tổng cầu, nhất là trong môi trường số hóa nơi lao động tự do và nền kinh tế gig phát triển, hay chuỗi cung ứng toàn cầu dễ bị gián đoạn bởi đại dịch hoặc xung đột địa chính trị. Do đó, cần có sự phối hợp linh hoạt hơn giữa chính sách tài khóa, tiền tệ và các biện pháp cấu trúc như đầu tư vào giáo dục số và chuyển đổi xanh, để thích ứng với những thách thức mới như bất bình đẳng thu nhập gia tăng và biến đổi khí hậu.",
   },
 ];
 
@@ -516,7 +531,7 @@ export default function KeynesPage() {
                       loading="lazy"
                       className="rounded-xl border shadow-sm w-full h-auto object-cover"
                     />
-                    <figcaption className="mt-2 text-xs text-gray-600">
+                    <figcaption className="mt-2 text-sm font-semibold text-gray-600">
                       {g.alt}
                     </figcaption>
                   </figure>

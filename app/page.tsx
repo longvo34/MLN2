@@ -40,14 +40,14 @@ const ECONOMISTS = [
   },
 ];
 
-// Key Concepts
+// Key Concepts (SỬA HREF: Bỏ /economists/ để trỏ đúng route)
 const CONCEPTS = [
   {
     key: "aggregate-demand",
     title: "Aggregate Demand",
     oneLine: "Tổng cầu quyết định sản lượng & việc làm trong ngắn hạn.",
     iconSrc: "/images/aggregate_demand.jpg",
-    href: "/economists/keynes#ideas",
+    href: "/keynes#ideas",  // SỬA: /keynes thay vì /economists/keynes
   },
   {
     key: "synthesis",
@@ -55,35 +55,35 @@ const CONCEPTS = [
     oneLine:
       "Dung hoà Keynes–tân cổ điển: can thiệp ngắn hạn, thị trường dài hạn.",
     iconSrc: "/images/home/diagram-synthesis-venn.svg",
-    href: "/economists/samuelson#ideas",
+    href: "/samuelson#ideas",  // SỬA: /samuelson
   },
   {
     key: "public-goods",
     title: "Public Goods",
     oneLine: "Không loại trừ & không cạnh tranh → cần vai trò Nhà nước.",
     iconSrc: "/images/home/icon-public-goods.svg",
-    href: "/economists/samuelson#works",
+    href: "/samuelson#works",  // SỬA: /samuelson
   },
   {
     key: "externalities",
     title: "Externalities",
     oneLine: "Hiệu ứng ngoại biên → cần điều tiết/thuế/phí/chuẩn mực.",
     iconSrc: "/images/home/diagram-externalities.svg",
-    href: "/economists/samuelson#ideas",
+    href: "/samuelson#ideas",  // SỬA: /samuelson
   },
   {
     key: "ppf",
     title: "PPF",
     oneLine: "Đường biên khả năng sản xuất; minh hoạ đánh đổi nguồn lực.",
     iconSrc: "/images/home/chart-ppf.svg",
-    href: "/economists/samuelson#ideas",
+    href: "/samuelson#ideas",  // SỬA: /samuelson
   },
   {
     key: "isoquant",
     title: "Isoquant",
     oneLine: "Đường đồng sản lượng; lựa chọn kỹ thuật sản xuất.",
     iconSrc: "/images/home/chart-isoquant.svg",
-    href: "/economists/samuelson#ideas",
+    href: "/samuelson#ideas",  // SỬA: /samuelson
   },
 ];
 
@@ -204,9 +204,6 @@ export default function HomePage() {
             </Link>
             <Link href="#faq" className="hover:text-gray-900">
               FAQ
-            </Link>
-            <Link href="#subscribe" className="hover:text-gray-900">
-              Đăng ký
             </Link>
           </nav>
         </div>
@@ -468,32 +465,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="concepts" className="py-12 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">
-            Khái niệm cốt lõi của tư tưởng kinh tế
-          </h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {CONCEPTS.map((c) => (
-              <Link
-                key={c.key}
-                href={c.href}
-                className="group rounded-xl border bg-white p-4 hover:shadow-sm transition"
-              >
-                <div className="flex items-center gap-3">
-                  <div>
-                    <h3 className="font-semibold group-hover:text-gray-900">
-                      {c.title}
-                    </h3>
-                    <p className="text-sm text-gray-600">{c.oneLine}</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Milestones Timeline (h-scroll) */}
       <section className="py-12 px-4">
         <div className="max-w-6xl mx-auto grid md:grid-cols-[1.2fr,1fr] gap-8 items-center">
@@ -548,44 +519,6 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Quotes */}
-      <section
-        id="subscribe"
-        className="py-12 px-4 bg-gradient-to-br from-gray-900 to-gray-800 text-white"
-      >
-        <div className="max-w-6xl mx-auto grid md:grid-cols-[1.2fr,1fr] gap-8 items-center">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-bold">
-              Nhận cập nhật bài mới
-            </h2>
-            <p className="mt-2 text-white/80">
-              Khi có thêm triết gia kinh tế, khái niệm, hay phân tích mới —
-              chúng tôi sẽ gửi cho bạn.
-            </p>
-          </div>
-          {isClient ? (
-            <form
-              className="bg-white/10 backdrop-blur rounded-xl p-3 border border-white/20 flex gap-2"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <input
-                type="email"
-                required
-                placeholder="Email của bạn"
-                className="flex-1 bg-transparent placeholder-white/60 text-white focus:outline-none"
-                autoComplete="email"
-                name="email"
-              />
-              <button className="rounded-lg bg-white text-gray-900 px-4 py-2 text-sm font-semibold">
-                Đăng ký
-              </button>
-            </form>
-          ) : (
-            <div className="h-12" aria-hidden="true" />
-          )}
         </div>
       </section>
 

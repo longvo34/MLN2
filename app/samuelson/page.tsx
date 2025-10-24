@@ -61,29 +61,43 @@ const TIMELINE = [
   {
     year: 1915,
     title: "Sinh tại Gary, Indiana (Hoa Kỳ)",
-    desc: "Gia đình nhập cư gốc Ba Lan.",
+    desc: "Sinh ngày 15/5/1915 tại Gary, bang Indiana, trong gia đình nhập cư gốc Ba Lan, hình thành nền tảng tư tưởng tự do và học thuật từ môi trường công nghiệp Mỹ đầu thế kỷ XX.",
+  },
+  {
+    year: 1935,
+    title: "Tốt nghiệp Đại học Chicago",
+    desc: "Tốt nghiệp cử nhân kinh tế tại Đại học Chicago, tiếp cận các tư tưởng kinh tế cổ điển và tân cổ điển, khơi dậy niềm đam mê phân tích lý thuyết và mô hình hóa kinh tế.",
+  },
+  {
+    year: 1941,
+    title: "Tiến sĩ Harvard & bắt đầu MIT",
+    desc: "Hoàn thành tiến sĩ tại Harvard dưới sự hướng dẫn của Schumpeter, Hansen và Leontief; bắt đầu giảng dạy tại MIT, mở đường cho sự nghiệp đào tạo thế hệ nhà kinh tế hàng đầu thế giới.",
   },
   {
     year: 1947,
     title: "Foundations of Economic Analysis",
-    desc: "Đặt nền móng định lượng cho kinh tế học hiện đại.",
+    desc: "Xuất bản dựa trên luận án tiến sĩ, sử dụng toán học (giải tích, cực trị) để đặt nền móng định lượng cho kinh tế học hiện đại, thống nhất vi mô và vĩ mô trong khung lý thuyết logic.",
   },
   {
     year: 1948,
     title: "Economics: An Introductory Analysis",
-    desc: "Giáo trình có ảnh hưởng lớn, tái bản nhiều lần (sau này cùng Nordhaus).",
+    desc: "Ra mắt giáo trình kinh tế học có ảnh hưởng sâu rộng, phổ biến Neoclassical Synthesis qua cách tiếp cận dung hòa Keynes và cổ điển; tái bản hơn 20 lần, dịch ra hàng chục ngôn ngữ.",
   },
   {
     year: 1954,
     title: "The Pure Theory of Public Expenditure",
-    desc: "Lý thuyết hàng hóa công; cơ sở vai trò Nhà nước.",
+    desc: "Xây dựng lý thuyết hàng hóa công (không loại trừ, không cạnh tranh) trong bài báo trên Review of Economics and Statistics, xác lập cơ sở khoa học cho vai trò Nhà nước trong phúc lợi xã hội.",
   },
   {
     year: 1970,
     title: "Giải Nobel Kinh tế",
-    desc: "Vì những đóng góp phát triển lý thuyết kinh tế hiện đại.",
+    desc: "Nhận giải Nobel Kinh tế vì những đóng góp phát triển lý thuyết kinh tế hiện đại, đặc biệt là phương pháp toán học hóa và tổng hợp các trường phái tư tưởng.",
   },
-  { year: 2009, title: "Qua đời", desc: "Di sản học thuật bền vững." },
+  {
+    year: 2009,
+    title: "Qua đời",
+    desc: "Mất ngày 13/12/2009 tại Belmont, Massachusetts, hưởng thọ 94 tuổi, để lại di sản học thuật bền vững qua hàng ngàn bài báo, giáo trình và thế hệ học trò ảnh hưởng toàn cầu.",
+  },
 ];
 
 // Quotes
@@ -195,16 +209,16 @@ const GALLERY = [
 // Critiques
 const CRITIQUES = [
   {
-    title: "Toán học hóa & khoảng cách đời sống",
-    body: "Nguy cơ trừu tượng, xa yếu tố con người và bối cảnh xã hội.",
+    title: "Toán học hóa & khoảng cách với đời sống thực tế",
+    body: "Mặc dù có ảnh hưởng sâu rộng, học thuyết của Samuelson đã vấp phải phê phán từ nhiều học giả về việc sử dụng quá nhiều công cụ toán học, khiến kinh tế học trở nên trừu tượng và xa rời đời sống xã hội cũng như yếu tố con người. Các nhà phê phán như Joan Robinson (hậu Keynes) và trường phái kinh tế học hành vi (behavioral economics) cho rằng cách tiếp cận định lượng của Samuelson, dù khoa học, lại bỏ qua các yếu tố phi lý tính, cảm xúc và bối cảnh văn hóa – xã hội, dẫn đến các mô hình lý tưởng hóa không phản ánh đúng sự phức tạp của hành vi con người trong thực tế. Ví dụ, trong khủng hoảng tài chính 2008, các mô hình toán học hóa của Samuelson đã bị chỉ trích vì không dự báo được 'bong bóng tài chính' do kỳ vọng phi lý, nhấn mạnh nhu cầu bổ sung yếu tố tâm lý học vào phân tích kinh tế.",
   },
   {
-    title: "Giản lược bất định/kỳ vọng so với hậu-Keynes",
-    body: "Cần bổ sung chiều sâu về tâm lý, bất định và kỳ vọng.",
+    title: "Giản lược tư tưởng Keynes so với hậu-Keynes và trường phái thể chế",
+    body: "Các nhà hậu Keynes như Paul Davidson và trường phái thể chế (Thorstein Veblen, John R. Commons) phê phán Samuelson vì đã giản lược tư tưởng Keynes, làm mất đi chiều sâu phân tích về tâm lý, bất định và vai trò của kỳ vọng trong nền kinh tế. Trong khi Keynes nhấn mạnh sự bất ổn cố hữu của chủ nghĩa tư bản và nhu cầu can thiệp dựa trên trực giác chính sách, Samuelson lại hệ thống hóa nó thành các mô hình cân bằng toán học, loại bỏ khía cạnh 'nghệ thuật' và 'bất định cơ bản' (fundamental uncertainty). Điều này, theo các nhà phê phán, đã biến kinh tế học thành một khoa học 'giả định lý tưởng', bỏ qua vai trò của thể chế xã hội, quyền lực và xung đột giai cấp – những yếu tố then chốt trong việc giải thích bất bình đẳng và khủng hoảng, như được thấy trong các phân tích về stagflation những năm 1970.",
   },
   {
-    title: "Giới hạn trong thời đại số & toàn cầu hóa",
-    body: "Dòng vốn xuyên biên giới, kinh tế số, bất bình đẳng đòi hỏi phối hợp chính sách mới.",
+    title: "Giới hạn trong bối cảnh toàn cầu hóa, chuyển đổi số và khủng hoảng môi trường",
+    body: "Trong bối cảnh thế kỷ XXI với toàn cầu hóa sâu rộng, chuyển đổi số và khủng hoảng môi trường ngày càng cấp bách, mô hình kinh tế hỗn hợp truyền thống của Samuelson bộc lộ những giới hạn rõ nét. Các công cụ tài khóa – tiền tệ kinh điển mà ông phát triển có xu hướng kém hiệu quả hơn khi đối mặt với dòng vốn xuyên biên giới biến động (như trong khủng hoảng tài chính châu Á 1997 hay 2008), kinh tế số nơi các nền tảng công nghệ thống trị (ví dụ, mô hình gig economy của Uber làm méo mó lao động truyền thống), và bất bình đẳng toàn cầu gia tăng (như phân tích của Thomas Piketty về r > g). Hơn nữa, các mô hình của Samuelson ít chú trọng đến bền vững môi trường, khiến chúng khó áp dụng cho các thách thức như biến đổi khí hậu và chuyển đổi năng lượng xanh. Do đó, cần có sự mở rộng bằng cách tích hợp kinh tế học hành vi, kinh tế học môi trường và chính sách toàn cầu hóa để thích ứng với thế giới hậu COVID-19 và địa chính trị phức tạp.",
   },
 ];
 
