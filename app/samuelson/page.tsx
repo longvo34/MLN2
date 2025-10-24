@@ -118,29 +118,25 @@ const QUOTES = [
   },
 ];
 
-// Comparison (4 cột: Keynes / Cổ điển / Samuelson)
+// Comparison (3 cột: Cổ điển/Tân cổ điển / Samuelson)
 const COMPARISON = [
   {
     k: "Trọng tâm",
-    keynes: "Ngắn hạn, tổng cầu",
     classical: "Dài hạn, thị trường tự điều chỉnh",
     samuelson: "Dung hòa ngắn–dài hạn (Synthesis)",
   },
   {
     k: "Vai trò Nhà nước",
-    keynes: "Can thiệp chủ động khi suy thoái",
     classical: "Tối thiểu, để cơ chế giá dẫn dắt",
     samuelson: "Can thiệp có mục tiêu + tôn trọng cơ chế giá",
   },
   {
     k: "Phương pháp",
-    keynes: "Thiên định tính/ trực giác",
     classical: "Mô hình tối ưu hóa",
     samuelson: "Hệ thống hóa, định lượng hóa học thuyết Keynes",
   },
   {
     k: "Công cụ",
-    keynes: "Tài khóa, tiền tệ kích cầu",
     classical: "Kỷ luật cung–cầu, kỳ vọng dài hạn",
     samuelson: "Phối hợp chính sách linh hoạt theo chu kỳ",
   },
@@ -428,7 +424,6 @@ export default function SamuelsonPage() {
                   <thead className="bg-gray-50">
                     <tr className="[&>th]:px-4 [&>th]:py-3 [&>th]:text-left [&>th]:font-semibold">
                       <th>Tiêu chí</th>
-                      <th>Keynes</th>
                       <th>Cổ điển/Tân cổ điển</th>
                       <th>Samuelson (Tổng hợp)</th>
                     </tr>
@@ -437,7 +432,6 @@ export default function SamuelsonPage() {
                     {COMPARISON.map((row) => (
                       <tr key={row.k} className="[&>td]:px-4 [&>td]:py-3">
                         <td className="font-medium text-gray-800">{row.k}</td>
-                        <td className="text-gray-700">{row.keynes}</td>
                         <td className="text-gray-700">{row.classical}</td>
                         <td className="text-gray-700">{row.samuelson}</td>
                       </tr>
