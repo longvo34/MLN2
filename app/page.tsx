@@ -1,556 +1,677 @@
-"use client"
-import { BookOpen, TrendingUp, Scale, Users, AlertCircle } from "lucide-react"
+"use client";
 
-export default function Home() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id)
-    element?.scrollIntoView({ behavior: "smooth" })
-  }
+import Image from "next/image";
+import Link from "next/link";
+import { useMemo, useEffect, useState } from "react";
+import {
+  BookOpen,
+  ArrowRight,
+  ChevronRight,
+  Quote as QuoteIcon,
+  Sparkles,
+  GraduationCap,
+  Landmark,
+} from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import ComparisonSection from "@/components/ui/ComparisonSection";
+import MilestoneTimeline from "@/components/ui/MilestoneTimeline";
+
+/** ==================================================
+ * HOME DATA (editable) — chỉ cần sửa mảng này
+ * ================================================== */
+
+// Featured Economists
+const ECONOMISTS = [
+  {
+    slug: "keynes",
+    name: "John Maynard Keynes",
+    lifespan: "1883–1946",
+    summary:
+      "Đặt nền móng kinh tế vĩ mô hiện đại: tổng cầu, can thiệp Nhà nước, General Theory (1936).",
+    thumb: "/images/keynes-tri-thuc.jpg",
+    tags: ["Keynesian", "Bretton Woods"],
+  },
+  {
+    slug: "samuelson",
+    name: "Paul A. Samuelson",
+    lifespan: "1915–2009",
+    summary:
+      "Neoclassical Synthesis; toán học hoá kinh tế học; Nobel 1970; giáo trình Economics (1948).",
+    thumb: "/images/hero-samuelson-mit-portrait.jpg",
+    tags: ["Nobel 1970", "MIT"],
+  },
+];
+
+// Key Concepts (SỬA HREF: Bỏ /economists/ để trỏ đúng route)
+const CONCEPTS = [
+  {
+    key: "aggregate-demand",
+    title: "Aggregate Demand",
+    oneLine: "Tổng cầu quyết định sản lượng & việc làm trong ngắn hạn.",
+    iconSrc: "/images/aggregate_demand.jpg",
+    href: "/keynes#ideas", // SỬA: /keynes thay vì /economists/keynes
+  },
+  {
+    key: "synthesis",
+    title: "Neoclassical Synthesis",
+    oneLine:
+      "Dung hoà Keynes–tân cổ điển: can thiệp ngắn hạn, thị trường dài hạn.",
+    iconSrc: "/images/home/diagram-synthesis-venn.svg",
+    href: "/samuelson#ideas", // SỬA: /samuelson
+  },
+  {
+    key: "public-goods",
+    title: "Public Goods",
+    oneLine: "Không loại trừ & không cạnh tranh → cần vai trò Nhà nước.",
+    iconSrc: "/images/home/icon-public-goods.svg",
+    href: "/samuelson#works", // SỬA: /samuelson
+  },
+  {
+    key: "externalities",
+    title: "Externalities",
+    oneLine: "Hiệu ứng ngoại biên → cần điều tiết/thuế/phí/chuẩn mực.",
+    iconSrc: "/images/home/diagram-externalities.svg",
+    href: "/samuelson#ideas", // SỬA: /samuelson
+  },
+  {
+    key: "ppf",
+    title: "PPF",
+    oneLine: "Đường biên khả năng sản xuất; minh hoạ đánh đổi nguồn lực.",
+    iconSrc: "/images/home/chart-ppf.svg",
+    href: "/samuelson#ideas", // SỬA: /samuelson
+  },
+  {
+    key: "isoquant",
+    title: "Isoquant",
+    oneLine: "Đường đồng sản lượng; lựa chọn kỹ thuật sản xuất.",
+    iconSrc: "/images/home/chart-isoquant.svg",
+    href: "/samuelson#ideas", // SỬA: /samuelson
+  },
+];
+
+// Milestones
+const MILESTONES = [
+  {
+    year: 1919,
+    title: "Versailles",
+    desc: "Keynes phê phán bồi thường chiến tranh trong Economic Consequences.",
+    img: "/images/versailles-1919.jpg",
+  },
+  {
+    year: 1936,
+    title: "General Theory",
+    desc: "Tác phẩm kinh điển về tổng cầu, việc làm và lãi suất.",
+    img: "/images/The-General-Theory.jpg",
+  },
+  {
+    year: 1947,
+    title: "Foundations",
+    desc: "Samuelson đặt nền mô hình hoá & comparative statics.",
+    img: "/images/foundations-of-economic-analysis-1947.jpg",
+  },
+  {
+    year: 1948,
+    title: "Economics",
+    desc: "Giáo trình có ảnh hưởng sâu rộng của Samuelson.",
+    img: "/images/economics-an-introductory-analysis-1948.png",
+  },
+  {
+    year: 1954,
+    title: "Public Expenditure",
+    desc: "Lý thuyết hàng hoá công – vai trò Nhà nước.",
+    img: "/images/Expenditure.png",
+  },
+  {
+    year: 1970,
+    title: "Nobel",
+    desc: "Samuelson nhận giải Nobel Kinh tế đầu tiên cho người Mỹ.",
+    img: "/images/nobel.jpg",
+  },
+];
+
+// Quotes
+const QUOTES = [
+  {
+    text: "In the long run we are all dead.",
+    by: "J. M. Keynes",
+    source: "A Tract on Monetary Reform (1923)",
+  },
+  {
+    text: "Economics is a choice between alternatives all the time. Those are the trade-offs.",
+    by: "P. A. Samuelson",
+    source: "Attributed",
+  },
+  {
+    text: "Good questions outrank easy answers.",
+    by: "P. A. Samuelson",
+    source: "Attributed",
+  },
+];
+
+// Việt Nam badges
+const VN_BADGES = [
+  { label: "Đổi mới", value: "1986" },
+  { label: "Chính sách", value: "Tài khóa – Tiền tệ linh hoạt" },
+  { label: "Mục tiêu", value: "Tăng trưởng bền vững" },
+  { label: "Kinh tế công", value: "Hàng hóa công, ngoại tác" },
+];
+
+// Gallery
+const GALLERY = [
+  { src: "/images/keynes-gia.jpg", alt: "Chân dung Keynes" },
+  { src: "/images/hero-samuelson-mit-portrait.jpg", alt: "Samuelson tại MIT" },
+  { src: "/images/The-General-Theory.jpg", alt: "Bìa General Theory" },
+  {
+    src: "/images/foundations-of-economic-analysis-1947.jpg",
+    alt: "Bìa Foundations",
+  },
+  { src: "/images/ppf-illustration.svg", alt: "PPF vẽ tay" },
+  { src: "/images/giang-duong.jpg", alt: "Lớp học kinh tế" },
+];
+
+/* ---------------------------------------------
+ * HOME PAGE
+ * -------------------------------------------*/
+export default function HomePage() {
+  // Fix hydration mismatch for newsletter form by rendering it client-only
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
+  const heroTitle = useMemo(() => "Bức tranh tư tưởng kinh tế", []);
+  const heroSub = useMemo(
+    () =>
+      "Trang nhập môn về triết gia kinh tế và dòng chảy tư tưởng: bức tranh tổng quát, rồi đi sâu vào Keynes & Samuelson.",
+    []
+  );
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-blue-900 to-blue-800 text-white py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="flex justify-center gap-4 mb-6 text-4xl">
-            <BookOpen className="w-12 h-12" />
-            <TrendingUp className="w-12 h-12" />
+    <main className="min-h-screen bg-white text-gray-900">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur border-b sticky top-0 z-30">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link href="/" className="font-bold tracking-tight text-xl">
+            Economics Panorama
+          </Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-gray-700">
+            <Link href="#economists" className="hover:text-gray-900">
+              Triết gia kinh tế
+            </Link>
+            <Link href="#concepts" className="hover:text-gray-900">
+              Khái niệm cốt lõi
+            </Link>
+            <Link href="#milestones" className="hover:text-gray-900">
+              Dòng thời gian
+            </Link>
+            <Link href="#quotes" className="hover:text-gray-900">
+              Trích dẫn
+            </Link>
+            <Link href="#faq" className="hover:text-gray-900">
+              FAQ
+            </Link>
+            <Link href="#comparison" className="hover:text-gray-900">
+              So sánh
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+              {heroTitle}
+            </h1>
+            <p className="mt-4 text-lg text-gray-700">{heroSub}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link
+                href="#economists"
+                className="inline-flex items-center gap-2 rounded-full bg-gray-900 text-white px-5 py-2 text-sm"
+              >
+                Khám phá ngay <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/keynes"
+                className="inline-flex items-center gap-2 rounded-full border px-5 py-2 text-sm"
+              >
+                Bắt đầu từ Keynes
+              </Link>
+              <Link
+                href="/samuelson"
+                className="inline-flex items-center gap-2 rounded-full border px-5 py-2 text-sm"
+              >
+                Samuelson
+              </Link>
+            </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4">
-            Những Kiến Trúc Sư
-            <br />
-            <span className="text-cyan-300">Kinh Tế Học Hiện Đại</span>
-          </h1>
-          <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
-            Khám phá tư tưởng và di sản của hai nhà kinh tế vĩ đại: <strong>John Maynard Keynes</strong> và{" "}
-            <strong>Paul Samuelson</strong>
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <button
-              onClick={() => scrollToSection("keynes")}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition"
-            >
-              Tìm hiểu về Keynes
-            </button>
-            <button
-              onClick={() => scrollToSection("samuelson")}
-              className="border-2 border-blue-300 hover:bg-blue-800 text-white px-8 py-3 rounded-lg font-semibold transition"
-            >
-              Tìm hiểu về Samuelson
-            </button>
+
+          <div className="relative h-[260px] md:h-[360px]">
+            <Image
+              src="/images/history.png"
+              alt="Collage bìa sách & chân dung các nhà kinh tế"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority
+              className="object-cover rounded-2xl shadow-2xl border"
+            />
           </div>
         </div>
       </section>
 
-      {/* Quick Facts */}
-      <section className="py-16 px-4 bg-blue-50">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-6">
-          <div className="bg-blue-900 text-white p-6 rounded-lg border-2 border-blue-700">
-            <p className="text-3xl font-bold mb-2">1883-1946</p>
-            <p className="text-blue-100">John Maynard Keynes - Cha đẻ của kinh tế học vĩ mô</p>
-          </div>
-          <div className="bg-blue-800 text-white p-6 rounded-lg border-2 border-blue-600">
-            <p className="text-3xl font-bold mb-2">1915-2009</p>
-            <p className="text-blue-100">Paul Samuelson - Người Mỹ đầu tiên đoạt giải Nobel Kinh tế</p>
-          </div>
-          <div className="bg-blue-700 text-white p-6 rounded-lg border-2 border-blue-500">
-            <p className="text-3xl font-bold mb-2">Thế kỷ 20</p>
-            <p className="text-blue-100">Định hình tư duy kinh tế toàn cầu</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Keynes Section */}
-      <section id="keynes" className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-900">John Maynard Keynes</h2>
-          <p className="text-center text-gray-600 mb-12">Cha đẻ của Kinh tế học Vĩ mô Hiện đại</p>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Left: Biography */}
-            <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <Users className="w-6 h-6 text-blue-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Tiểu sử</h3>
-              </div>
-
-              <div className="space-y-4 mb-6">
-                <div>
-                  <p className="text-lg font-bold text-gray-900">1883-1946</p>
-                  <p className="text-gray-600">Hưởng thọ 62 tuổi</p>
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900">Cambridge, Anh Quốc</p>
-                  <p className="text-gray-600">Nơi sinh và hoạt động chính</p>
-                </div>
-              </div>
-
-              <p className="text-gray-700 mb-4">
-                Sinh trong gia đình trí thức, cha là nhà kinh tế học John Neville Keynes, mẹ là chính trị gia Florence
-                Ada Keynes. Học tại Eton College và Đại học Cambridge, chịu ảnh hưởng sâu sắc từ nhà kinh tế Alfred
-                Marshall.
-              </p>
-
-              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-                <p className="text-sm italic text-gray-700">
-                  "Keynes đưa ra học thuyết mới nhằm giải thích nguyên nhân thất nghiệp kéo dài và để xuất vai trò của
-                  nhà nước trong quản lý kinh tế."
-                </p>
-              </div>
-
-              <div className="mt-6">
-                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-blue-600" />
-                  Bối cảnh lịch sử
-                </h4>
-                <p className="text-gray-700">
-                  Đại khủng hoảng kinh tế 1929-1933 đã chứng minh thị trường không tự điều chỉnh được như các nhà kinh
-                  tế cổ điển cho rằng. Thất nghiệp và suy thoái kéo dài, buộc tìm kiếm một lý thuyết mới.
-                </p>
-              </div>
-            </div>
-
-            {/* Right: Theories */}
-            <div className="bg-blue-600 text-white p-8 rounded-lg shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <BookOpen className="w-6 h-6" />
-                <h3 className="text-2xl font-bold">Tư tưởng kinh tế chủ đạo</h3>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-blue-700 p-4 rounded-lg border border-blue-500">
-                  <h4 className="font-bold mb-2">Thị trường không tự điều chỉnh hoàn hảo</h4>
-                  <p className="text-blue-100 text-sm">
-                    Tổng cầu quyết định mức sản lượng và việc làm. Khi tổng cầu giảm và nợ công, nền kinh tế sẽ rơi vào
-                    suy thoái.
-                  </p>
-                </div>
-
-                <div className="bg-blue-700 p-4 rounded-lg border border-blue-500">
-                  <h4 className="font-bold mb-2">Vai trò của Nhà nước</h4>
-                  <p className="text-blue-100 text-sm">
-                    Chính sách tài khóa mở rộng, xem nhẹ nạng suất dài hạn. Chính phủ phải hành động ngay để giải quyết
-                    thất nghiệp và khủng hoảng.
-                  </p>
-                </div>
-
-                <div className="bg-blue-700 p-4 rounded-lg border border-blue-500">
-                  <h4 className="font-bold mb-2">Chính sách tiền tệ linh hoạt</h4>
-                  <p className="text-blue-100 text-sm">
-                    Giảm lãi suất để khuyến khích đầu tư từ nhân, duy trì ổn định tổng cầu.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quote */}
-          <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mb-12">
-            <p className="text-lg italic text-gray-800 mb-2">"In the long run we are all dead."</p>
-            <p className="text-gray-600 text-sm">Về lâu dài, tất cả chúng ta đều chết.</p>
-            <p className="text-gray-500 text-xs mt-2">— A Tract on Monetary Reform (1923)</p>
-            <p className="text-gray-700 text-sm mt-4">
-              Keynes nhấn mạnh quan điểm thị trường sẽ tự điều chỉnh trong dài hạn. Chính phủ phải hành động ngay để
-              giải quyết thất nghiệp và khủng hoảng.
+      {/* Featured Economists */}
+      <section id="intro" className="py-8 px-4 border-y bg-white/60">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-[1.3fr,1fr] gap-8 items-start">
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold mb-3">Giới thiệu</h2>
+            <p className="text-gray-700">
+              Trang chủ phác hoạ bức tranh <strong>triết gia kinh tế</strong> và
+              các dòng tư tưởng chủ đạo. Từ cái nhìn tổng quát, bạn có thể đi
+              sâu vào hai nhân vật mở đầu: <em>John Maynard Keynes</em> và{" "}
+              <em>Paul A. Samuelson</em>.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Keynes Publications Section */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-2xl font-bold text-center mb-8 text-gray-900">Sản phẩm trí tuệ nổi bật của Keynes</h3>
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white border-l-4 border-blue-600 p-6 rounded-lg shadow">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">The Economic Consequences of the Peace</h4>
-              <p className="text-sm text-gray-500 mb-4">1919</p>
-              <p className="text-gray-700 text-sm">
-                Phê phán Hiệp ước Versailles, cảnh báo về nguy cơ suy sup kinh tế châu Âu. Tác phẩm giúp ông nổi tiếng
-                toàn cầu.
-              </p>
-            </div>
-
-            <div className="bg-white border-l-4 border-blue-600 p-6 rounded-lg shadow">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">A Treatise on Money</h4>
-              <p className="text-sm text-gray-500 mb-4">1930</p>
-              <p className="text-gray-700 text-sm">
-                Phân tích mối quan hệ giữa cung tiền, lãi suất và đầu tư. Công trình tiền đề cho lý thuyết kinh tế vĩ mô
-                sau này.
-              </p>
-            </div>
-
-            <div className="bg-white border-l-4 border-blue-600 p-6 rounded-lg shadow">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">The General Theory</h4>
-              <p className="text-sm text-gray-500 mb-4">1936</p>
-              <p className="text-gray-700 text-sm">
-                Tác phẩm quan trọng nhất, đặt nền móng cho kinh tế học vĩ mô hiện đại. Buộc ngoài của kinh tế học thế kỷ
-                XX.
-              </p>
-            </div>
-          </div>
-
-          {/* Keynes Vietnam Impact */}
-          <div className="bg-yellow-50 border border-yellow-200 p-6 rounded-lg">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Ảnh hưởng tại Việt Nam</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2">Khủng hoảng 2008-2009</h4>
-                <p className="text-gray-700 text-sm">
-                  Chính phủ triển khai gói kích cơ 8 tỷ USD (8.8% GDP), bao gồm hỗ trợ lãi suất 4%, tăng chi tiêu công,
-                  đầu tư hạ tầng. Việt Nam duy trì tăng trưởng 5.3% khi nhiều nước tăng trưởng âm.
-                </p>
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2">Đại dịch COVID-19</h4>
-                <p className="text-gray-700 text-sm">
-                  Gói hỗ trợ 350 nghìn tỷ đồng (Nghị quyết 43/2022), giảm lãi suất, giảm nợ cho doanh nghiệp. Duy trì
-                  tăng trưởng dương 2.9% (2020) và 2.6% (2021) trong khi nhiều nước suy thoái.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Samuelson Section */}
-      <section id="samuelson" className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-900">Paul Anthony Samuelson</h2>
-          <p className="text-center text-gray-600 mb-12">Người Mỹ đầu tiên đoạt giải Nobel Kinh tế</p>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Left: Biography */}
-            <div className="bg-white border border-gray-200 p-8 rounded-lg shadow-sm">
-              <div className="flex items-center gap-3 mb-6">
-                <Users className="w-6 h-6 text-green-600" />
-                <h3 className="text-2xl font-bold text-gray-900">Tiểu sử</h3>
-              </div>
-
-              <div className="space-y-4 mb-6">
-                <div>
-                  <p className="text-lg font-bold text-gray-900">1915-2009</p>
-                  <p className="text-gray-600">Hưởng thọ 94 tuổi</p>
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900">Nobel Kinh tế 1970</p>
-                  <p className="text-gray-600">Phát triển lý thuyết kinh tế hiện đại</p>
-                </div>
-              </div>
-
-              <p className="text-gray-700 mb-4">
-                Sinh tại Gary, Indiana trong gia đình nhập cư Ba Lan. Học kinh tế tại Đại học Chicago, sau đó cao học
-                tại Harvard dưới sự hướng dẫn của Joseph Schumpeter, Alvin Hansen và Wassily Leontief.
-              </p>
-
-              <p className="text-gray-700 mb-4">
-                Giảng dạy hơn 40 năm tại MIT, đào tạo nhiều nhà kinh tế hàng đầu thế giới như Robert Solow và Joseph
-                Stiglitz.
-              </p>
-
-              <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                <p className="text-sm italic text-gray-700">
-                  Samuelson kế thừa Keynes, kết hợp mô hình toán học để hình thành kinh tế học tổng hợp (Neoclassical
-                  Synthesis) - dung hòa giữa Keynes và kinh tế cổ điển.
-                </p>
-              </div>
-
-              <div className="mt-6">
-                <h4 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-green-600" />
-                  Bối cảnh hình thành
-                </h4>
-                <p className="text-gray-700">
-                  Sau Đại khủng hoảng và Thế chiến II, kinh tế thế giới cần nâng lý luận mới. Học thuyết Keynes ra đời
-                  nhưng còn thiếu hệ thống hóa và công cụ định lượng.
-                </p>
-              </div>
-            </div>
-
-            {/* Right: Theories */}
-            <div className="bg-green-600 text-white p-8 rounded-lg shadow-lg">
-              <div className="flex items-center gap-3 mb-6">
-                <BookOpen className="w-6 h-6" />
-                <h3 className="text-2xl font-bold">Tư tưởng kinh tế chủ đạo</h3>
-              </div>
-
-              <div className="space-y-4">
-                <div className="bg-green-700 p-4 rounded-lg border border-green-500">
-                  <h4 className="font-bold mb-2">Kinh tế học tổng hợp</h4>
-                  <p className="text-green-100 text-sm">
-                    Phối hợp thị trường và Nhà nước. Ngăn hạn can thiệp Keynesian, đại hạn để thị trường phân bổ nguồn
-                    lực.
-                  </p>
-                </div>
-
-                <div className="bg-green-700 p-4 rounded-lg border border-green-500">
-                  <h4 className="font-bold mb-2">Toán học hóa kinh tế học</h4>
-                  <p className="text-green-100 text-sm">
-                    Sử dụng mô hình toán, độ thị để làm cho lý thuyết Keynes trở nên khoa học, định lượng và dễ áp dụng.
-                  </p>
-                </div>
-
-                <div className="bg-green-700 p-4 rounded-lg border border-green-500">
-                  <h4 className="font-bold mb-2">Lý thuyết hàng hóa công</h4>
-                  <p className="text-green-100 text-sm">
-                    Chi ra vì sao Nhà nước phải cung cấp hàng hóa công công như giáo dục, y tế, môi trường.
-                  </p>
-                </div>
-
-                <div className="bg-green-700 p-4 rounded-lg border border-green-500">
-                  <h4 className="font-bold mb-2">Nguyên lý nhân số - tăng tốc</h4>
-                  <p className="text-green-100 text-sm">
-                    Giải thích dao động kinh tế theo chu kỳ thông qua hiệu ứng multiplier và accelerator.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Quote */}
-          <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-lg mb-12">
-            <p className="text-lg italic text-gray-800 mb-2">"Good questions outrank easy answers."</p>
-            <p className="text-gray-600 text-sm">Những câu hỏi đúng giá trị hơn những câu trả lời dễ dàng.</p>
-            <p className="text-gray-700 text-sm mt-4">
-              Nhấn mạnh tầm quan trọng của việc đặt câu hỏi đúng hơn là tìm lời giải để dài. Thể hiện tính thận khoa học
-              phê phán và tự duy phân tích độc lập.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Samuelson Publications Section */}
-      <section className="py-16 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h3 className="text-2xl font-bold text-center mb-8 text-gray-900">Sản phẩm trí tuệ nổi bật của Samuelson</h3>
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            <div className="bg-white border-l-4 border-green-600 p-6 rounded-lg shadow">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">Foundations of Economic Analysis</h4>
-              <p className="text-sm text-gray-500 mb-4">1947</p>
-              <p className="text-gray-700 text-sm">
-                Sử dụng toán học để chứng minh hành vi kinh tế tuân theo nguyên lý tối ưu hóa. Đặt nền móng cho kinh tế
-                học định lượng hiện đại.
-              </p>
-            </div>
-
-            <div className="bg-white border-l-4 border-green-600 p-6 rounded-lg shadow">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">Economics: An Introductory Analysis</h4>
-              <p className="text-sm text-gray-500 mb-4">1948</p>
-              <p className="text-gray-700 text-sm">
-                Giáo trình có ảnh hưởng nhất thế kỷ 20, tái bản hơn 20 lần, dịch ra hàng chục ngôn ngữ. Hệ thống hóa tri
-                thức kinh tế học hiện đại.
-              </p>
-            </div>
-
-            <div className="bg-white border-l-4 border-green-600 p-6 rounded-lg shadow">
-              <h4 className="text-lg font-bold text-gray-900 mb-2">The Pure Theory of Public Expenditure</h4>
-              <p className="text-sm text-gray-500 mb-4">1954</p>
-              <p className="text-gray-700 text-sm">
-                Xây dựng lý thuyết hàng hóa công công, mở ra nhành mới trong kinh tế học công cộng. Xác lập cơ sở cho
-                vai trò nhà nước.
-              </p>
-            </div>
-          </div>
-
-          {/* Samuelson Vietnam Impact */}
-          <div className="bg-cyan-50 border border-cyan-200 p-6 rounded-lg">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">Ảnh hưởng tại Việt Nam</h3>
-            <p className="text-gray-700 mb-4">
-              Từ tưởng Samuelson du nhập sau Đổi mới 1986 qua các chương trình đào tạo và tổ chức quốc tế.
-            </p>
-            <p className="text-gray-700 mb-4">
-              Cách tiếp cận "tổng hợp tân cổ điển" giúp Việt Nam xây dựng mô hình kinh tế thị trường định hướng xã hội
-              chủ nghĩa:
-            </p>
-            <ul className="space-y-2 text-gray-700">
-              <li className="flex gap-2">
-                <span className="text-green-600 font-bold">•</span>
-                <span>Nhà nước giữ vai trò định hướng và điều tiết vĩ mô</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-green-600 font-bold">•</span>
-                <span>Thị trường đảm bảo hiệu quả phân bổ nguồn lực</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-green-600 font-bold">•</span>
-                <span>Chính sách tài khóa - tiền tệ linh hoạt ứng phó chu kỳ</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-green-600 font-bold">•</span>
-                <span>Phát triển bền vững và phân phối thu nhập công bằng</span>
-              </li>
+            <ul className="mt-3 text-sm text-gray-700 space-y-1 list-disc list-inside">
+              <li>Tư tưởng & công cụ phân tích (Key concepts)</li>
+              <li>Những cột mốc tư tưởng (Milestones)</li>
+              <li>Bối cảnh & ảnh hưởng tại Việt Nam</li>
             </ul>
           </div>
-        </div>
-      </section>
-
-      {/* Comparison Section */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center mb-8">
-            <Scale className="w-8 h-8 text-gray-900" />
-          </div>
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">So sánh và Đối chiếu</h2>
-
-          <div className="overflow-x-auto">
-            <table className="w-full bg-white rounded-lg overflow-hidden shadow">
-              <thead>
-                <tr className="bg-blue-900 text-white">
-                  <th className="px-6 py-4 text-left font-bold">Tiêu chí</th>
-                  <th className="px-6 py-4 text-left font-bold">Keynes</th>
-                  <th className="px-6 py-4 text-left font-bold">Kinh tế học có điều</th>
-                  <th className="px-6 py-4 text-left font-bold">Samuelson</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-bold text-gray-900">Cơ chế thị trường</td>
-                  <td className="px-6 py-4 text-gray-700">Thị trường không tự điều chỉnh, có thể suy thoái dài hạn</td>
-                  <td className="px-6 py-4 text-gray-700">Hạn chế tối đa, để thị trường tự do hoạt động</td>
-                  <td className="px-6 py-4 text-gray-700">Ngăn hạn can thiệp, đại hạn thị trường hiệu quả</td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-bold text-gray-900">Vai trò Nhà nước</td>
-                  <td className="px-6 py-4 text-gray-700">Can thiệp chủ động để kích cầu và ổn định vĩ mô</td>
-                  <td className="px-6 py-4 text-gray-700">Hạn chế tối đa, để thị trường tự do hoạt động</td>
-                  <td className="px-6 py-4 text-gray-700">Phối hợp giữa thị trường và điều tiết nhà nước</td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-bold text-gray-900">Nguyên nhân thất nghiệp</td>
-                  <td className="px-6 py-4 text-gray-700">Do tổng cầu không đủ duy trì lương</td>
-                  <td className="px-6 py-4 text-gray-700">Do tiền lương thực tế cao so với năng suất</td>
-                  <td className="px-6 py-4 text-gray-700">Ngăn hạn do tổng cầu, đại hạn do cấu trúc</td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-bold text-gray-900">Công cụ chính sách</td>
-                  <td className="px-6 py-4 text-gray-700">Chính sách tài khóa mở rộng, chi tiêu công</td>
-                  <td className="px-6 py-4 text-gray-700">Thị trường tự do, cạnh tranh hoàn hảo</td>
-                  <td className="px-6 py-4 text-gray-700">Kết hợp tài khóa và tiền tệ, mô hình toán học</td>
-                </tr>
-                <tr className="hover:bg-gray-50">
-                  <td className="px-6 py-4 font-bold text-gray-900">Phương pháp tiếp cận</td>
-                  <td className="px-6 py-4 text-gray-700">Phân tích định tính, trực giác chính sách</td>
-                  <td className="px-6 py-4 text-gray-700">Lý thuyết quy luật tự nhiên</td>
-                  <td className="px-6 py-4 text-gray-700">Toán học hóa, mô hình kinh tế học</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="rounded-2xl border p-4 bg-gray-50">
+            <p className="text-sm text-gray-700">Gợi ý bắt đầu:</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href="/keynes"
+                className="inline-flex items-center rounded-full bg-gray-900 text-white px-4 py-1.5 text-sm"
+              >
+                Keynes
+              </Link>
+              <Link
+                href="/samuelson"
+                className="inline-flex items-center rounded-full border px-4 py-1.5 text-sm"
+              >
+                Samuelson
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Criticisms Section */}
-      <section className="py-16 px-4 bg-white">
+      {/* Why learn philosophers of economics */}
+      <section id="why" className="py-10 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded mb-12">
-            <div className="flex gap-3 mb-3">
-              <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
-              <h2 className="text-2xl font-bold text-gray-900">Phê phán và giới hạn</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            Vì sao học triết gia kinh tế?
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="rounded-2xl border bg-white p-5">
+              <div className="flex items-center gap-2 text-gray-900 font-semibold mb-1">
+                <GraduationCap className="h-5 w-5" /> Hiểu bối cảnh tư tưởng
+              </div>
+              <p className="text-sm text-gray-700">
+                Nắm dòng chảy lịch sử và nền tảng triết lý đằng sau các mô hình
+                kinh tế.
+              </p>
             </div>
-            <p className="text-gray-700">
-              Cả hai học thuyết đều có những hạn chế trong bối cảnh kinh tế toàn cầu hiện đại
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white border-l-4 border-blue-500 p-6 rounded-lg shadow">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Phê phán Keynes</h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex gap-2">
-                  <span className="text-blue-500 font-bold">•</span>
-                  <span>Trường phái tiền tệ (Friedman): Đánh giá thấp vai trò tiền tệ, gây lạm phát và nợ công</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-500 font-bold">•</span>
-                  <span>Trường phái trong cung: Quá chủ trương tăng chi tiêu công, xem nhẹ nạng suất dài hạn</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-500 font-bold">•</span>
-                  <span>Hạn chế trong kinh tế toàn cầu và số hóa hiện đại</span>
-                </li>
-              </ul>
+            <div className="rounded-2xl border bg-white p-5">
+              <div className="flex items-center gap-2 text-gray-900 font-semibold mb-1">
+                <Sparkles className="h-5 w-5" /> Tư duy phản biện
+              </div>
+              <p className="text-sm text-gray-700">
+                Đặt câu hỏi đúng, nhìn xuyên qua giả định — thay vì thuộc lòng
+                kết quả.
+              </p>
             </div>
-
-            <div className="bg-white border-l-4 border-green-500 p-6 rounded-lg shadow">
-              <h3 className="text-xl font-bold mb-4 text-gray-900">Phê phán Samuelson</h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex gap-2">
-                  <span className="text-green-500 font-bold">•</span>
-                  <span>Toán học hóa quá mức làm kinh tế học xa rời thực tế xã hội</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-green-500 font-bold">•</span>
-                  <span>Hâu Keynes: Giản lược tư tưởng Keynes, mất chiều sâu về tâm lý vĩ kỳ vọng</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-green-500 font-bold">•</span>
-                  <span>Mô hình kinh tế hơn lập kém hiệu quả với động vốn toàn cầu và kinh tế số</span>
-                </li>
-              </ul>
+            <div className="rounded-2xl border bg-white p-5">
+              <div className="flex items-center gap-2 text-gray-900 font-semibold mb-1">
+                <Landmark className="h-5 w-5" /> Kết nối với chính sách
+              </div>
+              <p className="text-sm text-gray-700">
+                Liên hệ lý thuyết với thiết kế chính sách tài khóa, tiền tệ và
+                hàng hóa công.
+              </p>
+            </div>
+            <div className="rounded-2xl border bg-white p-5">
+              <div className="flex items-center gap-2 text-gray-900 font-semibold mb-1">
+                <BookOpen className="h-5 w-5" /> Công cụ & mô hình hoá
+              </div>
+              <p className="text-sm text-gray-700">
+                PPF, isoquant, tổng cầu… — các khái niệm cốt lõi để phân tích và
+                tranh luận.
+              </p>
             </div>
           </div>
+        </div>
+      </section>
 
-          <div className="bg-yellow-50 border border-yellow-300 p-6 rounded-lg mt-8">
+      <section className="py-6 px-4 bg-gradient-to-r from-gray-50 via-white to-gray-50 border-t border-b">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div className="rounded-xl border bg-white p-4">
+            <div className="text-2xl font-bold">2</div>
+            <div className="text-xs text-gray-600">Triết gia kinh tế</div>
+          </div>
+          <div className="rounded-xl border bg-white p-4">
+            <div className="text-2xl font-bold">6</div>
+            <div className="text-xs text-gray-600">Mốc tư tưởng</div>
+          </div>
+          <div className="rounded-xl border bg-white p-4">
+            <div className="text-2xl font-bold">6</div>
+            <div className="text-xs text-gray-600">Khái niệm cốt lõi</div>
+          </div>
+          <div className="rounded-xl border bg-white p-4">
+            <div className="text-2xl font-bold">∞</div>
+            <div className="text-xs text-gray-600">Liên hệ chính sách</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="economists" className="py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              Bắt đầu với hai triết gia kinh tế
+            </h2>
+            <Link
+              href="/"
+              className="text-sm text-gray-700 hover:text-gray-900 inline-flex items-center"
+            >
+              Tất cả <ChevronRight className="h-4 w-4" />
+            </Link>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
+            {ECONOMISTS.map((e) => (
+              <article
+                key={e.slug}
+                className="rounded-2xl border overflow-hidden bg-white shadow-sm"
+              >
+                <div className="relative h-52">
+                  <Image
+                    src={e.thumb}
+                    alt={e.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-5 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold">{e.name}</h3>
+                    <span className="text-xs text-gray-500">{e.lifespan}</span>
+                  </div>
+                  <p className="text-sm text-gray-700">{e.summary}</p>
+                  <div className="pt-2 flex flex-wrap gap-2">
+                    {e.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="rounded-full bg-gray-100 border px-2 py-0.5 text-xs text-gray-700"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="pt-3">
+                    <Link
+                      href={`/${e.slug}`}
+                      className="inline-flex items-center gap-1 text-gray-900 font-medium"
+                    >
+                      Xem chi tiết <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Key Concepts */}
+      <section id="paths" className="py-12 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            Lộ trình gợi ý
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Link
+              href="#concepts"
+              className="group rounded-2xl border bg-white p-6 hover:shadow-sm transition"
+            >
+              <div className="text-sm text-gray-500">Bước 1</div>
+              <h3 className="text-lg font-semibold mt-1">Khái niệm nền tảng</h3>
+              <p className="text-sm text-gray-700 mt-2">
+                Nắm tổng cầu, hàng hoá công, ngoại tác, PPF, isoquant…
+              </p>
+              <div className="mt-3 inline-flex items-center gap-1 text-gray-900 font-medium">
+                Vào học <ChevronRight className="h-4 w-4" />
+              </div>
+            </Link>
+            <Link
+              href="/keynes"
+              className="group rounded-2xl border bg-white p-6 hover:shadow-sm transition"
+            >
+              <div className="text-sm text-gray-500">Bước 2</div>
+              <h3 className="text-lg font-semibold mt-1">Keynes</h3>
+              <p className="text-sm text-gray-700 mt-2">
+                Bối cảnh Đại khủng hoảng, Tổng cầu & vai trò Nhà nước.
+              </p>
+              <div className="mt-3 inline-flex items-center gap-1 text-gray-900 font-medium">
+                Khám phá <ChevronRight className="h-4 w-4" />
+              </div>
+            </Link>
+            <Link
+              href="/samuelson"
+              className="group rounded-2xl border bg-white p-6 hover:shadow-sm transition"
+            >
+              <div className="text-sm text-gray-500">Bước 3</div>
+              <h3 className="text-lg font-semibold mt-1">Samuelson</h3>
+              <p className="text-sm text-gray-700 mt-2">
+                Tổng hợp tân cổ điển, mô hình hoá & hàng hoá công.
+              </p>
+              <div className="mt-3 inline-flex items-center gap-1 text-gray-900 font-medium">
+                Tiếp tục <ChevronRight className="h-4 w-4" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Milestones Timeline (h-scroll) */}
+      <section className="py-12 px-4">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-[1.2fr,1fr] gap-8 items-center">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">
+              Bản đồ ý niệm
+            </h2>
             <p className="text-gray-700">
-              <strong>Giá trị còn lại:</strong> Dù có hạn chế, cả hai đều đặt nền móng cho kinh tế học hiện đại. Giá trị
-              của họ nằm ở tư duy tổng hợp, phương pháp khoa học và khả năng thích ứng với thực tế - nền tảng cho các
-              nghiên cứu về phát triển bền vững và kinh tế hành vi sau này.
+              Từ <em>Tổng cầu</em> (Keynes) đến <em>Tổng hợp tân cổ điển</em>{" "}
+              (Samuelson), các khái niệm kết nối nhau để trả lời hai câu hỏi:{" "}
+              <strong>vì sao nền kinh tế suy thoái</strong> và{" "}
+              <strong>chúng ta có thể làm gì</strong>. Hàng hoá công & ngoại tác
+              chỉ ra giới hạn của thị trường; PPF & isoquant giúp hình dung đánh
+              đổi trong sản xuất.
             </p>
+          </div>
+          <div className="relative h-[260px] md:h-[320px]">
+            <Image
+              src="/images/concept-map-v5.svg"
+              alt="Bản đồ khái niệm kinh tế"
+              fill
+              className="object-contain"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* <section id="milestones" className="py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            Dòng thời gian
+          </h2>
+          <div className="flex gap-4 overflow-x-auto pb-2 snap-x">
+            {MILESTONES.map((m) => (
+              <div
+                key={m.year}
+                className="min-w-[280px] snap-start rounded-xl border bg-white overflow-hidden"
+              >
+                <div className="relative h-36">
+                  <Image
+                    src={m.img}
+                    alt={m.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <div className="text-xs text-gray-500">{m.year}</div>
+                  <div className="font-semibold">{m.title}</div>
+                  <div className="text-sm text-gray-700">{m.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section> */}
+
+      <MilestoneTimeline MILESTONES={MILESTONES} />
+
+      <section id="quotes" className="py-12 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">Trích dẫn</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {QUOTES.map((q, i) => (
+              <figure key={i} className="rounded-xl border bg-white p-5 h-full">
+                <blockquote className="text-lg italic text-gray-800 flex gap-2">
+                  <QuoteIcon className="h-5 w-5 text-gray-900 mt-1" />
+                  <span>“{q.text}”</span>
+                </blockquote>
+                <figcaption className="mt-2 text-sm text-gray-600">
+                  — {q.by}
+                  {q.source ? `, ${q.source}` : ""}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Vietnam */}
+      <section id="faq" className="py-12 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            Câu hỏi thường gặp
+          </h2>
+          <div className="divide-y rounded-2xl border bg-white">
+            <details className="p-4 group" open>
+              <summary className="cursor-pointer list-none flex items-center justify-between">
+                <span className="font-semibold text-gray-900">
+                  “Triết gia kinh tế” khác gì nhà kinh tế?
+                </span>
+                <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition" />
+              </summary>
+              <p className="pt-2 text-gray-700 text-sm">
+                Chúng tôi dùng khái niệm này để nhấn mạnh chiều sâu tư tưởng,
+                bối cảnh lịch sử và ảnh hưởng triết lý đứng sau mô hình/chính
+                sách.
+              </p>
+            </details>
+            <details className="p-4 group">
+              <summary className="cursor-pointer list-none flex items-center justify-between">
+                <span className="font-semibold text-gray-900">
+                  Làm sao bắt đầu nếu tôi mới học?
+                </span>
+                <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition" />
+              </summary>
+              <p className="pt-2 text-gray-700 text-sm">
+                Đi theo “Lộ trình gợi ý”: Khái niệm nền tảng → Keynes →
+                Samuelson.
+              </p>
+            </details>
+            <details className="p-4 group">
+              <summary className="cursor-pointer list-none flex items-center justify-between">
+                <span className="font-semibold text-gray-900">
+                  Nguồn tài liệu có đáng tin không?
+                </span>
+                <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition" />
+              </summary>
+              <p className="pt-2 text-gray-700 text-sm">
+                Ưu tiên nhà xuất bản/DOI/JSTOR/MIT/Nobel/Wikimedia (CC/PD).
+                Trích dẫn “attributed” được gắn nhãn rõ.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section id="vietnam" className="py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-[1.2fr,1fr] gap-8 items-start">
+            <div className="rounded-2xl border p-6 bg-white">
+              <div className="flex items-center gap-2 mb-3">
+                <Landmark className="h-5 w-5 text-gray-900" />
+                <h3 className="text-xl font-bold">Bối cảnh Việt Nam</h3>
+              </div>
+              <p className="text-gray-700">
+                Sau Đổi mới 1986, Việt Nam tiếp thu tư tưởng kinh tế hiện đại:
+                kết hợp vai trò Nhà nước và cơ chế thị trường, vận dụng linh
+                hoạt tài khóa – tiền tệ theo chu kỳ; chú trọng hàng hoá công,
+                ngoại tác và mục tiêu phát triển bền vững.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {VN_BADGES.map((b) => (
+                <div
+                  key={b.label}
+                  className="rounded-full border bg-white shadow-sm px-4 py-2 text-sm"
+                >
+                  <span className="font-semibold">{b.label}:</span>{" "}
+                  <span className="text-gray-800">{b.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      <ComparisonSection />
+
+      {/* Gallery */}
+      <section className="py-12 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-3xl font-bold mb-6">Hình ảnh</h2>
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [&_img]:mb-1">
+            {GALLERY.map((g) => (
+              <figure
+                key={g.src}
+                className="break-inside-avoid relative rounded-xl overflow-hidden shadow-sm group mb-4"
+              >
+                {/* Ảnh nền */}
+                <Image
+                  src={g.src}
+                  alt={g.alt}
+                  width={800}
+                  height={600}
+                  loading="lazy"
+                  className="w-full h-auto object-cover"
+                />
+                {/* Chú thích (chồng lên) */}
+                <figcaption
+                  className="absolute bottom-0 left-0 right-0 p-3 
+                       bg-gradient-to-t from-black/70 to-transparent 
+                       text-white text-xs 
+                       transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                >
+                  {g.alt}
+                </figcaption>
+              </figure>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold mb-4 flex items-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                Kinh Tế Học Vĩ Đại
-              </h4>
-              <p className="text-gray-400 text-sm">
-                Khám phá tư tưởng và di sản của những nhà kinh tế học vĩ đại định hình kinh tế thế giới hiện đại.
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Nhà kinh tế</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li>
-                  <button onClick={() => scrollToSection("keynes")} className="hover:text-white transition">
-                    John Maynard Keynes
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection("samuelson")} className="hover:text-white transition">
-                    Paul Samuelson
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => scrollToSection("keynes")} className="hover:text-white transition">
-                    So sánh và Đối chiếu
-                  </button>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-4">Tài nguyên</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li>The General Theory (Keynes, 1936)</li>
-                <li>Economics (Samuelson, 1948)</li>
-                <li>Foundations of Economic Analysis (1947)</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-            <p>© 2025 Kinh Tế Học Vĩ Đại. Nội dung dùa trên tài liệu lịch sử thuật và nghiên cứu.</p>
-            <p className="mt-2">Made with ❤️ for education</p>
-          </div>
+      <footer className="bg-gray-950 text-white py-10 px-4 mt-10">
+        <div className="max-w-6xl mx-auto text-center space-y-2">
+          <p className="text-gray-300">
+            Nguồn đề xuất: MIT Libraries, Nobel Prize, Harvard University Press,
+            Internet Archive, Wikimedia Commons.
+          </p>
+          <p className="text-gray-400">© 2025 Samuelson Economic Synthesis</p>
         </div>
       </footer>
     </main>
-  )
+  );
 }
