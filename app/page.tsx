@@ -549,53 +549,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Vietnam */}
-      <section id="faq" className="py-12 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">
-            Câu hỏi thường gặp
-          </h2>
-          <div className="divide-y rounded-2xl border bg-white">
-            <details className="p-4 group" open>
-              <summary className="cursor-pointer list-none flex items-center justify-between">
-                <span className="font-semibold text-gray-900">
-                  “Triết gia kinh tế” khác gì nhà kinh tế?
-                </span>
-                <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition" />
-              </summary>
-              <p className="pt-2 text-gray-700 text-sm">
-                Chúng tôi dùng khái niệm này để nhấn mạnh chiều sâu tư tưởng,
-                bối cảnh lịch sử và ảnh hưởng triết lý đứng sau mô hình/chính
-                sách.
-              </p>
-            </details>
-            <details className="p-4 group">
-              <summary className="cursor-pointer list-none flex items-center justify-between">
-                <span className="font-semibold text-gray-900">
-                  Làm sao bắt đầu nếu tôi mới học?
-                </span>
-                <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition" />
-              </summary>
-              <p className="pt-2 text-gray-700 text-sm">
-                Đi theo “Lộ trình gợi ý”: Khái niệm nền tảng → Keynes →
-                Samuelson.
-              </p>
-            </details>
-            <details className="p-4 group">
-              <summary className="cursor-pointer list-none flex items-center justify-between">
-                <span className="font-semibold text-gray-900">
-                  Nguồn tài liệu có đáng tin không?
-                </span>
-                <ChevronDown className="h-5 w-5 text-gray-600 group-open:rotate-180 transition" />
-              </summary>
-              <p className="pt-2 text-gray-700 text-sm">
-                Ưu tiên nhà xuất bản/DOI/JSTOR/MIT/Nobel/Wikimedia (CC/PD).
-                Trích dẫn “attributed” được gắn nhãn rõ.
-              </p>
-            </details>
-          </div>
-        </div>
-      </section>
+  
 
       <section id="vietnam" className="py-12 px-4">
         <div className="max-w-6xl mx-auto">
