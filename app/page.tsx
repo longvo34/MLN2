@@ -13,6 +13,8 @@ import {
   Landmark,
 } from "lucide-react";
 import { ChevronDown } from "lucide-react";
+import ComparisonSection from "@/components/ui/ComparisonSection";
+import MilestoneTimeline from "@/components/ui/MilestoneTimeline";
 
 /** ==================================================
  * HOME DATA (editable) — chỉ cần sửa mảng này
@@ -47,7 +49,7 @@ const CONCEPTS = [
     title: "Aggregate Demand",
     oneLine: "Tổng cầu quyết định sản lượng & việc làm trong ngắn hạn.",
     iconSrc: "/images/aggregate_demand.jpg",
-    href: "/keynes#ideas",  // SỬA: /keynes thay vì /economists/keynes
+    href: "/keynes#ideas", // SỬA: /keynes thay vì /economists/keynes
   },
   {
     key: "synthesis",
@@ -55,35 +57,35 @@ const CONCEPTS = [
     oneLine:
       "Dung hoà Keynes–tân cổ điển: can thiệp ngắn hạn, thị trường dài hạn.",
     iconSrc: "/images/home/diagram-synthesis-venn.svg",
-    href: "/samuelson#ideas",  // SỬA: /samuelson
+    href: "/samuelson#ideas", // SỬA: /samuelson
   },
   {
     key: "public-goods",
     title: "Public Goods",
     oneLine: "Không loại trừ & không cạnh tranh → cần vai trò Nhà nước.",
     iconSrc: "/images/home/icon-public-goods.svg",
-    href: "/samuelson#works",  // SỬA: /samuelson
+    href: "/samuelson#works", // SỬA: /samuelson
   },
   {
     key: "externalities",
     title: "Externalities",
     oneLine: "Hiệu ứng ngoại biên → cần điều tiết/thuế/phí/chuẩn mực.",
     iconSrc: "/images/home/diagram-externalities.svg",
-    href: "/samuelson#ideas",  // SỬA: /samuelson
+    href: "/samuelson#ideas", // SỬA: /samuelson
   },
   {
     key: "ppf",
     title: "PPF",
     oneLine: "Đường biên khả năng sản xuất; minh hoạ đánh đổi nguồn lực.",
     iconSrc: "/images/home/chart-ppf.svg",
-    href: "/samuelson#ideas",  // SỬA: /samuelson
+    href: "/samuelson#ideas", // SỬA: /samuelson
   },
   {
     key: "isoquant",
     title: "Isoquant",
     oneLine: "Đường đồng sản lượng; lựa chọn kỹ thuật sản xuất.",
     iconSrc: "/images/home/chart-isoquant.svg",
-    href: "/samuelson#ideas",  // SỬA: /samuelson
+    href: "/samuelson#ideas", // SỬA: /samuelson
   },
 ];
 
@@ -204,6 +206,9 @@ export default function HomePage() {
             </Link>
             <Link href="#faq" className="hover:text-gray-900">
               FAQ
+            </Link>
+            <Link href="#comparison" className="hover:text-gray-900">
+              So sánh
             </Link>
           </nav>
         </div>
@@ -492,7 +497,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="milestones" className="py-12 px-4">
+      {/* <section id="milestones" className="py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold mb-6">
             Dòng thời gian
@@ -520,7 +525,9 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <MilestoneTimeline MILESTONES={MILESTONES} />
 
       <section id="quotes" className="py-12 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
@@ -619,23 +626,34 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <ComparisonSection />
 
       {/* Gallery */}
       <section className="py-12 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">Hình ảnh</h2>
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [&_img]:mb-4">
+          <h2 className="text-3xl md:text-3xl font-bold mb-6">Hình ảnh</h2>
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 [&_img]:mb-1">
             {GALLERY.map((g) => (
-              <figure key={g.src} className="break-inside-avoid">
+              <figure
+                key={g.src}
+                className="break-inside-avoid relative rounded-xl overflow-hidden shadow-sm group mb-4"
+              >
+                {/* Ảnh nền */}
                 <Image
                   src={g.src}
                   alt={g.alt}
                   width={800}
                   height={600}
                   loading="lazy"
-                  className="rounded-xl border shadow-sm w-full h-auto object-cover"
+                  className="w-full h-auto object-cover"
                 />
-                <figcaption className="mt-2 text-xs text-gray-600">
+                {/* Chú thích (chồng lên) */}
+                <figcaption
+                  className="absolute bottom-0 left-0 right-0 p-3 
+                       bg-gradient-to-t from-black/70 to-transparent 
+                       text-white text-xs 
+                       transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                >
                   {g.alt}
                 </figcaption>
               </figure>
