@@ -204,12 +204,21 @@ export default function HomePage() {
             <Link href="#quotes" className="hover:text-gray-900">
               Trích dẫn
             </Link>
-            <Link href="#faq" className="hover:text-gray-900">
-              FAQ
-            </Link>
             <Link href="#comparison" className="hover:text-gray-900">
               So sánh
             </Link>
+              <Link
+    href="#footer"
+    className="hover:text-gray-900"
+  >
+    Thành viên nhóm
+  </Link>
+                <Link
+        href="/quiz"
+        className="inline-flex items-center gap-2 rounded-full bg-gray-900 text-white px-5 py-2 text-sm"
+      >
+        Làm quiz
+      </Link>
           </nav>
         </div>
       </header>
@@ -617,15 +626,62 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-950 text-white py-10 px-4 mt-10">
-        <div className="max-w-6xl mx-auto text-center space-y-2">
-          <p className="text-gray-300">
-            Nguồn đề xuất: MIT Libraries, Nobel Prize, Harvard University Press,
-            Internet Archive, Wikimedia Commons.
-          </p>
-          <p className="text-gray-400">© 2025 Samuelson Economic Synthesis</p>
-        </div>
-      </footer>
+   <footer
+  id="footer"
+  className="bg-[#0a0d1a] text-gray-200 py-12 px-6 border-t border-gray-800"
+>
+  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+    {/* Cột 1: Logo + mô tả */}
+   <div>
+  <h2 className="text-xl font-semibold text-white flex items-center gap-2 mb-3">
+    <span className="text-blue-400">📊</span> Economics Panorama
+  </h2>
+  <p className="text-gray-400 text-sm leading-relaxed">
+    Nền tảng học tập và khám phá tư tưởng kinh tế học – tập trung vào hai nhà kinh tế vĩ đại 
+    <strong> John Maynard Keynes </strong> và <strong> Paul Samuelson</strong>, 
+    giúp người học hiểu sâu hơn về kinh tế vĩ mô hiện đại, chính sách tài khóa, 
+    và sự tiến hóa của tư duy kinh tế qua thời đại.
+  </p>
+</div>
+
+
+    {/* Cột 2: Thành viên */}
+    <div>
+      <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+        <span className="text-blue-400">👥</span> Thành viên
+      </h3>
+      <ul className="text-gray-400 text-sm space-y-1">
+        <li>Võ Thành Long – SE170173</li>
+        <li>Nguyễn Mạnh Tiến – SE170204</li>
+        <li>Nguyễn Quốc Chánh – SE160851</li>
+        <li>Trịnh Tiến Đạt – SE184725</li>
+        <li>Trịnh	Kim	Phát – SS180837</li>
+      </ul>
+    </div>
+
+    {/* Cột 3: Công nghệ & AI */}
+    <div>
+      <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-3">
+        <span className="text-blue-400">⚙️</span> Công nghệ & AI
+      </h3>
+      <ul className="text-gray-400 text-sm space-y-2">
+        <li>
+          <strong className="text-white">ChatGPT (OpenAI)</strong> – Hỗ trợ tạo nội dung triết học, giải thích
+          khái niệm, trích dẫn tư tưởng, viết bài.
+        </li>
+        <li>
+          <strong className="text-white">Gemini AI (Google DeepMind)</strong> – Chatbot
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  {/* Dòng bản quyền */}
+  <div className="max-w-6xl mx-auto mt-10 border-t border-gray-800 pt-6 text-center text-xs text-gray-500">
+    © 2025 Philosopath — Sản phẩm học tập triết học hiện đại.
+  </div>
+</footer>
+
     </main>
   );
 }
