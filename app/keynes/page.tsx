@@ -208,10 +208,7 @@ const QUOTES = [
 
 // Gallery (ending) — 👉 tên file chữ thường trong /public/images/keynes
 const GALLERY = [
-  {
-    src: "/images/keynes-va-nhom-bloomsbury.jpg",
-    alt: "Keynes và nhóm Bloomsbury/Cambridge Apostles",
-  },
+
   { src: "/images/keynes-tre.jpg", alt: "Keynes thời trẻ" },
   { src: "/images/keynes-gia.jpg", alt: "Keynes giai đoạn cuối đời" },
 ];
@@ -452,27 +449,7 @@ export default function KeynesPage() {
               </div>
             </section>
 
-            {/* Vietnam badges */}
-            <section>
-              <SectionTitle>Vận dụng tại Việt Nam</SectionTitle>
-              <div className="flex flex-wrap gap-3">
-                {VN_STATS.map((s) => (
-                  <div
-                    key={s.label}
-                    className="rounded-full border px-4 py-2 text-sm bg-white shadow-sm"
-                  >
-                    <span className="font-semibold">{s.label}:</span>{" "}
-                    <span className="text-blue-700">{s.value}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="mt-3 text-sm text-gray-600">
-                Gói kích cầu 2008–2009 (hỗ trợ lãi suất 4%, đầu tư công, miễn
-                giảm thuế) giúp GDP 2009 đạt 5,3%. Giai đoạn COVID-19, gói tài
-                khóa theo NQ 43/2022 cùng chính sách tiền tệ linh hoạt giúp Việt
-                Nam duy trì tăng trưởng dương.
-              </p>
-            </section>
+
 
             {/* Works */}
             <section>
